@@ -32,7 +32,7 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: run build script with ghrunner config
-        run: ./build.sh --ghrunner --kernel --clean --rootfs --initramfs --zram --kernelbranch linux-6.12.y --hostname usbmycloud --boot usb --release bullseye --root-pw 1234
+        run: ./build.sh --ghrunner --kernel --rootfs --initramfs --kernelbranch linux-6.12.y --hostname wdmycloud --boot usb --release trixie --root-pw 123456
 
       # Upload build results
       #- uses: actions/upload-artifact@v4

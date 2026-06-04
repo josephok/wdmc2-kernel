@@ -76,10 +76,10 @@ rescue_telnet(){
   mount -t devpts none /dev/pts
 
   ip link set eth0 up
-  ip addr add 192.168.1.1/24 dev eth0
+  ip addr add 192.168.1.9/24 dev eth0
   # udhcpc -n -q -i eth0  -x hostname:rescue-wd
 
-  telnetd -l /bin/sh -b 0.0.0.0:6666
+  telnetd -l /bin/sh -b 0.0.0.0:23
   sleep 30
 }
 
@@ -92,7 +92,7 @@ ask_for_stop(){
 }
 
 try_boot(){
-  device=\${1:-/dev/sdb2}
+  device=\${1:-/dev/sda2}
 
   if [ ! -x /newroot/\${init} ] && [ ! -h /newroot/\${init} ] && [ -b \${device} ]; then
     mount -t \${rootfstype} -o \${ro},\${rootflags} \${device} /newroot
@@ -109,9 +109,9 @@ wd_set_mac(){
 
 wd_set_led(){
   led_color=\${1:-green}
-  echo none > /sys/class/leds/system-blue/trigger
-  echo ide-disk > /sys/class/leds/system-red/trigger
-  echo default-on > /sys/class/leds/system-\${led_color}/trigger
+  echo none > /sys/class/leds/blue:hdd/trigger
+  echo ide-disk > /sys/class/leds/red:sys/trigger
+  echo default-on > /sys/class/leds/\${led_color}:sys/trigger
 }
 
 init_mount(){
@@ -151,7 +151,7 @@ if [ "\${root}"x != "/dev/ram"x ]; then
 fi
 
 # try 2nd partition on usb
-try_boot /dev/sdb2
+try_boot /dev/sda2
 
 # try 1st partition on hdd
 try_boot /dev/sda1

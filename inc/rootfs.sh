@@ -2,6 +2,12 @@
 
 build_root_fs()
 {
+	TARGET="/proc/sys/fs/binfmt_misc/qemu-arm"
+	REGISTER="/proc/sys/fs/binfmt_misc/register"
+
+	if [ ! -f "$TARGET" ]; then
+		echo ':qemu-arm:M::\x7f\x45\x4c\x46\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x28\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/qemu-arm-static:F' > "$REGISTER"
+	fi
     # setup some more or less static config variables
     arch='armhf'
     qemu_binary='qemu-arm-static'

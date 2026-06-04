@@ -44,7 +44,7 @@ fi
 
 if [[ $GHRUNNER != 'on' ]]; then
     echo "### Will try to use apt to install prerequisites."
-    apt-get install build-essential bc libncurses5 dialog u-boot-tools git libncurses-dev lib32z1 lib32ncurses5-dev libmpc-dev libmpfr-dev libgmp3-dev flex bison debootstrap debian-archive-keyring qemu-user-static gcc-arm-none-eabi
+    apt-get install build-essential bc dialog u-boot-tools git libncurses-dev libmpc-dev libmpfr-dev libgmp3-dev flex bison debootstrap debian-archive-keyring qemu-user-static gcc-arm-none-eabi
 fi
 
 # calculate dialog sizes
@@ -61,7 +61,7 @@ if [[ -z $BUILD_KERNEL ]] && [[ -z $BUILD_ROOTFS ]]; then
 
     # set sensible defaults
     BUILD_KERNEL='on'
-    CLEAN_KERNEL_SRC='on'
+    CLEAN_KERNEL_SRC='off'
     ALLOW_KERNEL_SRC_CHANGES='off'
     ALLOW_KERNEL_CONFIG_CHANGES='off'
 
@@ -69,7 +69,7 @@ if [[ -z $BUILD_KERNEL ]] && [[ -z $BUILD_ROOTFS ]]; then
     ALLOW_ROOTFS_CHANGES='off'
     ALLOW_CMDLINE_CHANGES='off'
     ASK_EXTRA_PKGS='off'
-    ZRAM_ENABLED='on'
+    ZRAM_ENABLED='off'
 
     # Show user checklist to select
     display_checklist "Build setup" "Select components and options for build:" \
@@ -117,14 +117,14 @@ fi
 # inquire about further kernel configuration
 if [[ $BUILD_KERNEL == "on" ]] && [ -z "$kernel_branch" ]; then
     display_select "Kernel Building" "Please select the Linux Kernel branch to build." \
+        "6.12" "Linux kernel 6.12 LTS - Trixie" \
         "4.18" "Linux kernel 4.18" \
         "5.6" "Linux kernel 5.6" \
         "5.8" "Linux kernel 5.8" \
         "5.10" "Linux kernel 5.10 LTS" \
         "5.15" "Linux kernel 5.15 LTS" \
         "6.1"  "Linux kernel 6.1  LTS - Bookworm" \
-        "6.3"  "Linux kernel 6.3" \
-        "6.12" "Linux kernel 6.12 LTS - Trixie"
+        "6.3"  "Linux kernel 6.3"
 
     ############################################################
     # Required gcc:

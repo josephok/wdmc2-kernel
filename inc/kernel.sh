@@ -130,7 +130,7 @@ build_kernel()
     cp "${boot_dir}"/uImage-${kernel_version} "${boot_dir}"/uImage
 
     echo "### Cleanup and tar results"
-    rm "${output_dir}"/lib/modules/*/source
+    # rm "${output_dir}"/lib/modules/*/source
     rm "${output_dir}"/lib/modules/*/build
 
     # tar and compress modules for easier transport

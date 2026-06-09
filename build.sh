@@ -30,7 +30,7 @@ current_user="$(stat --format %U "${current_dir}"/.git)"
 ### Begin figuring out configuration
 ############################################################
 GHRUNNER='off'
-THREADS=8
+THREADS=$(getconf _NPROCESSORS_ONLN)
 EXTRA_PKGS='bash-completion htop'
 makehelp='make CROSS_COMPILE=/usr/bin/arm-none-eabi- ARCH=arm'                                         #FOR KERNEL VERSION >= 5.6 (via apt)
 
@@ -118,7 +118,6 @@ fi
 if [[ $BUILD_KERNEL == "on" ]] && [ -z "$kernel_branch" ]; then
     display_select "Kernel Building" "Please select the Linux Kernel branch to build." \
         "6.12" "Linux kernel 6.12 LTS - Trixie" \
-        "4.18" "Linux kernel 4.18" \
         "5.6" "Linux kernel 5.6" \
         "5.8" "Linux kernel 5.8" \
         "5.10" "Linux kernel 5.10 LTS" \

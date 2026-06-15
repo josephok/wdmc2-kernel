@@ -2,8 +2,6 @@
 
 ## WD My Cloud Gen2 based on Marvell ARMADA 375
 
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/donate?hosted_button_id=HXWRU82YBV7HC&source=url)
-
 This repository contains documentation and sources to build your own linux kernel, ramdisk and debian to run a WD MyCloud Gen2 drive. It can also be used as a starting point, to get similar devices running or just learn about linux booting in general.
 
 ### Whats included?
@@ -23,7 +21,7 @@ This repository contains documentation and sources to build your own linux kerne
 
 * prerequisites for building will be installed by build.sh automatically.
   * buildscript has been developed and tested on Ubuntu Jammy with gcc-arm-none-eabi hosted in a VirtualBox, there are known problems when using older debian/ubuntu releases or wsl(2)
-  * `apt-get install build-essential bc libncurses5 dialog u-boot-tools git libncurses-dev lib32z1 lib32ncurses5-dev libmpc-dev libmpfr-dev libgmp3-dev flex bison debootstrap debian-archive-keyring qemu-user-static`
+  * `apt-get install build-essential bc dialog u-boot-tools git libncurses-dev libmpc-dev libmpfr-dev libgmp3-dev flex bison debootstrap debian-archive-keyring qemu-user-static`
   * gcc for arm eabi `apt-get install gcc-arm-none-eabi`
     * OR (ONLY USE IF ABOVE DOES NOT WORK)
     * extract the gcc/glibc archive from toolchain to /opt

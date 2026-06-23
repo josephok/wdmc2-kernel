@@ -10,7 +10,7 @@ This repository contains documentation and sources to build your own linux kerne
   * device tree source ./dts/armada-375-wdmc-gen2.dts
   * kernel config for various kernels (check ./config/)
   * some tweaks and pointers in txt files ./docs/
-  * toolchain for building old kernels is included as txz ./toolchain/ . I suggest using the gcc-arm-none-eabi toolchain via apt!
+  * toolchain for building old kernels is included as txz ./toolchain/ . I suggest using the gcc-arm-linux-gnueabihf toolchain via apt!
   * a build script to build the kernel, ramdisk and debootstrap a debian system
   * some fixes/customization for the device
   * a script to update the ramdisk in place
@@ -20,9 +20,9 @@ This repository contains documentation and sources to build your own linux kerne
 * clone repository, run build.sh, select the options you want, deploy to wdmc2.
 
 * prerequisites for building will be installed by build.sh automatically.
-  * buildscript has been developed and tested on Ubuntu Jammy with gcc-arm-none-eabi hosted in a VirtualBox, there are known problems when using older debian/ubuntu releases or wsl(2)
+  * buildscript has been developed and tested on Debian trixie with gcc-arm-linux-gnueabihf, there are known problems when using older debian/ubuntu releases or wsl(2)
   * `apt-get install build-essential bc dialog u-boot-tools git libncurses-dev libmpc-dev libmpfr-dev libgmp3-dev flex bison debootstrap debian-archive-keyring qemu-user-static`
-  * gcc for arm eabi `apt-get install gcc-arm-none-eabi`
+  * gcc for arm eabi `apt-get install gcc-arm-linux-gnueabihf`
     * OR (ONLY USE IF ABOVE DOES NOT WORK)
     * extract the gcc/glibc archive from toolchain to /opt
     * adjust the path to the gcc in build.sh

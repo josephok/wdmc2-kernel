@@ -32,7 +32,7 @@ current_user="$(stat --format %U "${current_dir}"/.git)"
 GHRUNNER='off'
 THREADS=$(getconf _NPROCESSORS_ONLN)
 EXTRA_PKGS='bash-completion htop'
-makehelp='make CROSS_COMPILE=/usr/bin/arm-none-eabi- ARCH=arm'                                         #FOR KERNEL VERSION >= 5.6 (via apt)
+makehelp='make CROSS_COMPILE=/usr/bin/arm-linux-gnueabihf- ARCH=arm'                                         #FOR KERNEL VERSION >= 5.6 (via apt)
 
 # start by reading command line arguments
 read_arguments "$@"
@@ -44,7 +44,7 @@ fi
 
 if [[ $GHRUNNER != 'on' ]]; then
     echo "### Will try to use apt to install prerequisites."
-    apt-get install build-essential bc dialog u-boot-tools git libncurses-dev libmpc-dev libmpfr-dev libgmp3-dev flex bison debootstrap debian-archive-keyring qemu-user-static gcc-arm-none-eabi
+    apt-get install build-essential bc dialog u-boot-tools git libncurses-dev libmpc-dev libmpfr-dev libgmp3-dev flex bison debootstrap debian-archive-keyring qemu-user-static gcc-arm-linux-gnueabihf
 fi
 
 # calculate dialog sizes

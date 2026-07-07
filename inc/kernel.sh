@@ -88,14 +88,6 @@ build_kernel()
     # cd into linux source
     cd "${kernel_dir}"
 
-
-    if [ -f "${current_dir}/patches/*.patch" ]; then
-        echo "### Applying patches"
-        git apply -v "${current_dir}"/patches/*.patch
-    else
-    	echo "### No active patches found, skipping"
-    fi
-	
     if [[ ${ALLOW_KERNEL_SRC_CHANGES} == 'on' ]]; then
     	echo "### You can now adjust the kernel in ${kernel_dir}"
         read -r -p "### Press any key to continue..." -n1

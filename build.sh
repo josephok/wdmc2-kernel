@@ -117,6 +117,7 @@ fi
 # inquire about further kernel configuration
 if [[ $BUILD_KERNEL == "on" ]] && [ -z "$kernel_branch" ]; then
     display_select "Kernel Building" "Please select the Linux Kernel branch to build." \
+		"7.1" "Linux kernel 7.1" \
         "6.12" "Linux kernel 6.12 LTS - Trixie" \
         "5.6" "Linux kernel 5.6" \
         "5.8" "Linux kernel 5.8" \

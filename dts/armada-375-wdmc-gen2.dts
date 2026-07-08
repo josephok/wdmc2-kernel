@@ -15,6 +15,10 @@
 		led-failsafe = &led_boot;
 		led-upgrade = &led_boot;
 		label-mac-device = &eth0;
+		/* Lets U-Boot's fdt_fixup_ethernet() locate this node and
+		 * inject the MAC address from the "ethaddr" environment
+		 * variable as the "mac-address" property at boot time. */
+		ethernet0 = &eth0;
 	};
 
 	chosen {
@@ -106,18 +110,6 @@
 			partition@00000 {
 				label = "u-boot";
 				reg = <0x0 0x100000>;
-
-				nvmem-layout {
-					compatible = "fixed-layout";
-					#address-cells = <1>;
-					#size-cells = <1>;
-
-					macaddr: macaddr@ff800 {
-						compatible = "mac-base";
-						reg = <0xff800 0x11>;
-						#nvmem-cell-cells = <1>;
-					};
-				};
 			};
 		};
 	};
@@ -200,8 +192,11 @@
 &eth0 {
 	status = "okay";
 
-	nvmem-cells = <&macaddr 0>;
-	nvmem-cell-names = "mac-address";
+	/* MAC address is provided by U-Boot at boot time via its
+	 * fdt_fixup_ethernet() mechanism, which reads the "ethaddr"
+	 * environment variable and writes it into this node's
+	 * "mac-address" property (matched through the "ethernet0" alias
+	 * above). No nvmem-based mac-address source is needed here. */
 
 	phy = <&phy0>;
 	phy-mode = "rgmii-id";

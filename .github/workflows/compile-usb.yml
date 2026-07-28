@@ -20,8 +20,9 @@ permissions:
 jobs:
   # This workflow contains a single job called "build"
   build-usb:
-    # The type of runner that the job will run on
-    runs-on: [ self-hosted ]
+    # Use a GitHub-hosted runner (no self-hosted runner is registered/online,
+    # which previously caused jobs to wait 24h for a runner and get cancelled)
+    runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -30,9 +31,18 @@ jobs:
         with:
           clean: 'false'
 
+      # --ghrunner skips build.sh's own prerequisite install/root-check, so
+      # the hosted runner's fresh VM needs them installed explicitly here.
+      - name: install build prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential bc dialog u-boot-tools git \
+            libncurses-dev libmpc-dev libmpfr-dev libgmp3-dev flex bison \
+            debootstrap debian-archive-keyring qemu-user-static gcc-arm-linux-gnueabihf
+
       # Runs a single command using the runners shell
       - name: run build script with ghrunner config
-        run: ./build.sh --ghrunner --kernel --rootfs --initramfs --kernelbranch linux-6.12.y --hostname wdmycloud --boot usb --release trixie --root-pw 123456
+        run: sudo ./build.sh --ghrunner --kernel --rootfs --initramfs --kernelbranch linux-6.12.y --hostname wdmycloud --boot usb --release trixie --root-pw 123456
 
       # Upload build results
       #- uses: actions/upload-artifact@v4

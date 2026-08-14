@@ -100,7 +100,8 @@
 
 		compatible = "jedec,spi-nor";
 		reg = <0>; /* Chip select 0 */
-		spi-max-frequency = <108000000>;
+		/* MX25L8006E max clock is 86 MHz */
+		spi-max-frequency = <86000000>;
 
 		partitions {
 			compatible = "fixed-partitions";

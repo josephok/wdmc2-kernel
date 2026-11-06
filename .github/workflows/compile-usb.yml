@@ -7,11 +7,19 @@ on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
     branches: [ master ]
+    # Also trigger on tag pushes (e.g. v1.0.0) so creating a GitHub Release
+    # actually runs this workflow and its Release step.
+    tags: [ '*' ]
   #pull_request:
   #  branches: [ master ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+
+  # Also trigger when a GitHub Release is published directly (e.g. from an
+  # already-existing tag), which doesn't generate a new push event.
+  release:
+    types: [ published ]
 
 permissions:
   contents: write

@@ -101,7 +101,16 @@ build_kernel()
     $makehelp -j${THREADS} zImage
     $makehelp -j${THREADS} "${dts_dir}"armada-375-wdmc-gen2.dtb
     cat arch/arm/boot/zImage arch/arm/boot/dts/"${dts_dir}"armada-375-wdmc-gen2.dtb > zImage_and_dtb
+    # make legacy uImage
     mkimage -A arm -O linux -T kernel -C none -a 0x00008000 -e 0x00008000 -n 'WDMC-Gen2' -d zImage_and_dtb "${boot_dir}"/uImage-${kernel_version}
+
+    # make FIT Image
+    mkimage -f auto \
+    -A arm -O linux -T kernel -C none \
+    -a 0x00008000 -e 0x00008000 \
+    -d arch/arm/boot/zImage \
+    -b arch/arm/boot/dts/"${dts_dir}"armada-375-wdmc-gen2.dtb \
+    "${boot_dir}"/fitImage-${kernel_version}
     rm zImage_and_dtb
 
     $makehelp -j${THREADS} modules
@@ -120,6 +129,7 @@ build_kernel()
     chmod =rwxrxrx "${boot_dir}"/uImage-${kernel_version}
 
     cp "${boot_dir}"/uImage-${kernel_version} "${boot_dir}"/uImage
+    cp "${boot_dir}"/fitImage-${kernel_version} "${boot_dir}"/fitImage
 
     echo "### Cleanup and tar results"
     # rm "${output_dir}"/lib/modules/*/source
@@ -138,38 +148,38 @@ build_kernel()
 	fi
 	
     cd "${output_dir}"
-    tar -czf "${output_dir}"/boot-${kernel_version}.tar.gz boot/uRamdisk boot/uImage-${kernel_version} boot/uImage boot/linux-${kernel_version}.config
+    tar -czf "${output_dir}"/boot-${kernel_version}.tar.gz boot/uRamdisk boot/fitImage boot/uImage boot/linux-${kernel_version}.config
 
     rm "${boot_dir}"/uImage
 
     cd "${current_dir}"
 
-    # abort point for github runner to keep it from messing with permissions
-    if [[ $GHRUNNER == 'on' ]]; then
-        exit 0
+    # skip ownership/permission fixups on a github runner: there is no real
+    # non-root "current_user" there, and we must not exit here since that
+    # would abort the whole script before build_root_fs() gets a chance to run
+    if [[ $GHRUNNER != 'on' ]]; then
+        # fix permissions on folders for usability
+        chown "root:sudo" "${cache_dir}"
+        chown "root:sudo" "${cache_dir}"/*
+
+        chown "root:sudo" "${output_dir}"
+        chown -R "root:sudo" "${boot_dir}"
+        chown "root:sudo" "${output_dir}"/lib
+
+        if [ -f "${output_dir}"/modules-${kernel_version}.tar.gz ]; then
+            chown "${current_user}:sudo" "${output_dir}"/modules-${kernel_version}.tar.gz
+        fi
+        if [ -f "${output_dir}"/modules-${kernel_version}+.tar.gz ]; then
+            chown "${current_user}:sudo" "${output_dir}"/modules-${kernel_version}+.tar.gz
+        fi
+
+        chown "${current_user}:sudo" "${output_dir}"/boot-${kernel_version}.tar.gz
+
+        chmod "g+rw" "${cache_dir}"
+        chmod "g+rw" "${cache_dir}"/*
+        chmod "g+rw" "${output_dir}"
+        chmod -R "g+rw" "${boot_dir}"
+        chmod "g+rw" "${output_dir}"/lib
     fi
-
-    # fix permissions on folders for usability
-    chown "root:sudo" "${cache_dir}"
-    chown "root:sudo" "${cache_dir}"/*
-
-    chown "root:sudo" "${output_dir}"
-    chown -R "root:sudo" "${boot_dir}"
-    chown "root:sudo" "${output_dir}"/lib
-
-    if [ -f "${output_dir}"/modules-${kernel_version}.tar.gz ]; then
-    	chown "${current_user}:sudo" "${output_dir}"/modules-${kernel_version}.tar.gz
-	fi
-    if [ -f "${output_dir}"/modules-${kernel_version}+.tar.gz ]; then
-   	    chown "${current_user}:sudo" "${output_dir}"/modules-${kernel_version}+.tar.gz
-    fi
-
-    chown "${current_user}:sudo" "${output_dir}"/boot-${kernel_version}.tar.gz
-
-    chmod "g+rw" "${cache_dir}"
-    chmod "g+rw" "${cache_dir}"/*
-    chmod "g+rw" "${output_dir}"
-    chmod -R "g+rw" "${boot_dir}"
-    chmod "g+rw" "${output_dir}"/lib
 
 }

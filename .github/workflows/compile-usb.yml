@@ -38,17 +38,17 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential bc dialog u-boot-tools git \
             libncurses-dev libmpc-dev libmpfr-dev libgmp3-dev flex bison \
-            debootstrap debian-archive-keyring qemu-user-static gcc-arm-linux-gnueabihf
+            debootstrap debian-archive-keyring qemu-user-binfmt gcc-arm-linux-gnueabihf
 
       # Runs a single command using the runners shell
       - name: run build script with ghrunner config
         run: sudo ./build.sh --ghrunner --kernel --rootfs --initramfs --kernelbranch linux-6.12.y --hostname wdmycloud --boot usb --release trixie --root-pw 123456
 
       # Upload build results
-      #- uses: actions/upload-artifact@v4
-      #  with:
-      #    name: build-results
-      #    path: output/*.gz
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build-results
+          path: output/*.gz
 
       # Upload build release
       - name: Release
